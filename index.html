@@ -1,13 +1,100 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>to-do-app</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>to-do-app</title>
+</head>
+
+<body>
+  <main>
+
+
+    <header>
+
+      <div class="header-logo"><img src="/check-square-fill.svg" alt=""></div>
+
+      <div class="header-content">
+
+        <div class="header-title">
+          <h1>JD TODO APP</h1>
+          <p>Small Steps,Big Achievements.</p>
+        </div>
+
+        <div class="header-logo"><img src="/check-square-fill.svg" alt=""></div>
+
+      </div>
+
+    </header>
+
+    <div class="form">
+      <form action="post" id="task-form">
+        <input type="text" name="task" id="add-task" placeholder="Add a new task..." required>
+        <select name="priority" id="priority" required>
+          <option value="" disabled selected>Select priority...</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+        <input type="date" name="dueDate" id="dueDate" required>
+        <input type="submit" value="Add Task" id="add-task-btn">
+
+      </form>
+
+
+    </div>
+
+
+    <div class="filter-tab">
+      <div class="filter-btns">
+
+        <button class="active" data-filter="all-task" type="button">All</button>
+        <button data-filter="active-task" type="button">Active</button>
+        <button data-filter="completed-task" type="button">Completed</button>
+      </div>
+
+    </div>
+
+    <section class="task-list">
+      <div class="task-list-header">
+        <div class="task-list-left">
+          <span class="task-count" id="task-total">0 tasks</span>
+          <span>•</span>
+          <span class="task-completed" id="task-completed">0 completed</span>
+        </div>
+
+        <div class="task-list-right">
+          <span>Sort by:</span>
+          <select name="sort" id="sort">
+            <option value="newest">Newest </option>
+            <option value="oldest">Oldest </option>
+            <option value="priority">Priority </option>
+          </select>
+        </div>
+
+
+
+      </div>
+
+      <ul class="task-list-items" id="task-list-items">
+
+
+      </ul>
+
+    </section>
+
+
+
+
+
+
+
+  </main>
+
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
