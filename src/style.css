@@ -73,6 +73,17 @@ header {
 
 }
 
+.task-priority.priority-Low{
+    background-color: #d1fae5;
+    color: #002e16;
+}
+
+.task-priority.priority-Medium{
+    background-color: #fef3c7;
+    color: #473903;
+
+}
+
 #priority,
 #dueDate {
     flex: 0.5;

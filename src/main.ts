@@ -50,7 +50,7 @@ function renderTasks(taskstodisplay: Task[]) {
         </h3>
 
         <div class="details">
-          <span class="task-priority">${task.priority}</span>
+          <span class="task-priority priority-${task.priority}">${task.priority}</span>
 
           <div>
             <img src="/calendar-heart.svg" alt="yyjh">
