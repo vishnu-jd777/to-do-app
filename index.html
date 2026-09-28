@@ -14,7 +14,7 @@
 
     <header>
 
-      <div class="header-logo"><img src="/check-square-fill.svg" alt=""></div>
+      <div class="header-logo"><img src="/jd2.png" alt=""></div>
 
       <div class="header-content">
 
@@ -23,7 +23,7 @@
           <p>Small Steps,Big Achievements.</p>
         </div>
 
-        <div class="header-logo"><img src="/check-square-fill.svg" alt=""></div>
+        <div class="header-logo"><img src="/jd2.png" alt=""></div>
 
       </div>
 
@@ -38,7 +38,7 @@
           <option value="Medium">Medium</option>
           <option value="High">High</option>
         </select>
-        <input type="date" name="dueDate" id="dueDate" required>
+        <input type="date" name="dueDate" id="dueDate" placeholder="Select a duedate" required>
         <input type="submit" value="Add Task" id="add-task-btn">
 
       </form>
@@ -70,7 +70,8 @@
           <select name="sort" id="sort">
             <option value="newest">Newest </option>
             <option value="oldest">Oldest </option>
-            <option value="priority">Priority </option>
+            <option value="high-priority">Highest Priority </option>
+            <option value="low-priority">Lowest Priority</option>
           </select>
         </div>
 
@@ -84,6 +85,48 @@
       </ul>
 
     </section>
+
+    <div id="delete-modal" class="delete-modal">
+
+      <div class="delete-modal-content">
+
+        <h2>Delete Task?</h2>
+
+        <p>Are you sure you want to delete this task?</p>
+
+        <div class="delete-modal-actions">
+          <button id="delete-cancel">Cancel</button>
+          <button id="delete-confirm">Delete</button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="edit-modal" id="edit-modal">
+      <div class="edit-modal-content">
+        <h2>Edit task</h2>
+        <label for="edit-title">Task</label>
+        <input type="text" id="edit-title">
+
+        <label for="edit-priority">Priority</label>
+        <select name="priority" id="edit-priority">
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+
+        <label for="eedit-duedate">Duedate</label>
+        <input type="date" id="edit-date">
+
+        <div class="edit-modal-actions">
+          <button id="edit-cancel">Cancel</button>
+          <button id="edit-save">Save</button>
+        </div>
+
+      </div>
+
+    </div>
 
 
 

@@ -1,7 +1,7 @@
 export interface Task{
     id:string;
     taskTitle:string;
-    priority: 'low' | 'medium' | 'high';
+    priority: 'Low' | 'Medium' | 'High';
     dueDate:string;
     completed:boolean;
 }
