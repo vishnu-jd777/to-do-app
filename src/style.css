@@ -22,6 +22,8 @@ header {
     background-color: #4f46e5;
     padding: 10px 20px;
     column-gap: 20px;
+    position: sticky;
+    top: 0;
 
 }
 

@@ -3,6 +3,15 @@ import type { Task } from './type.ts'
 
 
 let tasks: Task[] = [];
+let taskListItems = document.querySelector('#task-list-items') as HTMLUListElement;
+
+const savedTasks = localStorage.getItem('tasks');
+
+if (savedTasks) {
+  tasks = JSON.parse(savedTasks);
+}
+
+renderTasks(tasks);
 
 const form = document.querySelector('#task-form') as HTMLFormElement;
 form.addEventListener('submit', (event) => {
@@ -20,12 +29,12 @@ form.addEventListener('submit', (event) => {
   }
 
   tasks.push(newTask);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
   renderTasks(tasks)
   form.reset();
 
 })
 
-let taskListItems = document.querySelector('#task-list-items') as HTMLUListElement;
 function renderTasks(taskstodisplay: Task[]) {
 
   taskListItems.innerHTML = '';
@@ -121,8 +130,10 @@ taskListItems.addEventListener('change', (event) => {
       task.completed = checkbox.checked;
 
 
-
+      localStorage.setItem('tasks', JSON.stringify(tasks));
       renderTasks(tasks);
+
+      
     }
   }
 });
@@ -213,7 +224,7 @@ deleteConfirm.addEventListener('click', () => {
 
 
   tasks = tasks.filter((task) => task.id !== taskToDeleteId);
-
+localStorage.setItem('tasks', JSON.stringify(tasks));
   renderTasks(tasks);
 
   deleteModal.style.display = 'none';
@@ -261,7 +272,7 @@ editSave.addEventListener('click', () => {
   task.taskTitle = editTitle.value.trim();
   task.priority = editPriority.value as 'Low' | 'Medium' | 'High';
   task.dueDate = editDate.value;
-
+localStorage.setItem('tasks', JSON.stringify(tasks));
   renderTasks(tasks);
 
   editModal.style.display = 'none';
