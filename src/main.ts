@@ -3,6 +3,7 @@ import type { Task } from './type.ts'
 
 
 let tasks: Task[] = [];
+let newTaskId: string | null = null;
 let taskListItems = document.querySelector('#task-list-items') as HTMLUListElement;
 
 const savedTasks = localStorage.getItem('tasks');
@@ -28,6 +29,7 @@ form.addEventListener('submit', (event) => {
     completed: false
   }
 
+  newTaskId = newTask.id;
   tasks.push(newTask);
   localStorage.setItem('tasks', JSON.stringify(tasks));
   renderTasks(tasks)
@@ -40,7 +42,7 @@ function renderTasks(taskstodisplay: Task[]) {
   taskListItems.innerHTML = '';
   taskstodisplay.forEach((task) => {
     const taskHtml = `
-<li>
+<li class="${task.id === newTaskId ? 'task-enter' : ''}">
   <div class="task-item-wrapper">
 
     <div class="task-item-info-left">
@@ -97,6 +99,7 @@ function renderTasks(taskstodisplay: Task[]) {
 
 
   })
+    newTaskId = null; 
 
   let taskTotal = document.querySelector('#task-total') as HTMLSpanElement;
   let taskcomplete = document.querySelector('#task-completed') as HTMLSpanElement;
@@ -132,6 +135,9 @@ taskListItems.addEventListener('change', (event) => {
 
       localStorage.setItem('tasks', JSON.stringify(tasks));
       renderTasks(tasks);
+       if (task.completed) {        // <-- new
+        triggerArise(task.id);     // <-- new
+      }  
 
       
     }
@@ -220,17 +226,29 @@ deleteCancel.addEventListener('click', () => {
 });
 
 deleteConfirm.addEventListener('click', () => {
-
-
-
-  tasks = tasks.filter((task) => task.id !== taskToDeleteId);
-localStorage.setItem('tasks', JSON.stringify(tasks));
-  renderTasks(tasks);
+  const idToDelete = taskToDeleteId;
+  if (!idToDelete) return;
 
   deleteModal.style.display = 'none';
-
   taskToDeleteId = null;
 
+  const checkbox = document.querySelector(
+    `.task-item-checkbox[data-id="${idToDelete}"]`
+  );
+  const li = checkbox?.closest('li');
+
+  const finishDelete = () => {
+    tasks = tasks.filter((task) => task.id !== idToDelete);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTasks(tasks);
+  };
+
+  if (li) {
+    li.classList.add('task-dissolve');
+    setTimeout(finishDelete, 700);
+  } else {
+    finishDelete();
+  }
 });
 
 let editingTaskId: string | null = null;
@@ -281,7 +299,7 @@ localStorage.setItem('tasks', JSON.stringify(tasks));
 });
 
 const sortSelect = document.querySelector('#sort') as HTMLSelectElement
-sortSelect?.addEventListener('change', (event) => {
+sortSelect?.addEventListener('change', () => {
   const sortvalue = sortSelect.value
 
   if (sortvalue == 'newest') {
@@ -315,4 +333,146 @@ sortSelect?.addEventListener('change', (event) => {
   }
 
 })
+
+function triggerArise(taskId: string) {
+  const newCheckbox = document.querySelector(
+    `.task-item-checkbox[data-id="${taskId}"]`
+  ) as HTMLInputElement | null;
+
+  const li = newCheckbox?.closest('li');
+  if (!li) return;
+
+  li.classList.add('arise');
+  setTimeout(() => li.classList.remove('arise'), 1800);
+
+  showAriseBanner();
+}
+
+function showAriseBanner() {
+  const banner = document.createElement('div');
+  banner.className = 'arise-banner';
+  banner.innerHTML = `
+    <span class="arise-sub">[ QUEST COMPLETE ]</span>
+    <span class="arise-main">ARISE</span>
+  `;
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 1700);
+}
+
+
+// ===== Day / Night toggle =====
+const themeToggle = document.querySelector('#theme-toggle') as HTMLButtonElement;
+
+if (localStorage.getItem('theme') === 'day') {
+  document.body.classList.remove('night');
+}
+
+themeToggle.addEventListener('click', () => {
+  const isNight = document.body.classList.toggle('night');
+  localStorage.setItem('theme', isNight ? 'night' : 'day');
+});
+
+
+// ===== Transparent purple smoke trail =====
+interface SmokePuff {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  maxLife: number;
+  size: number;
+  growth: number;
+  hue: number;
+}
+
+if (window.matchMedia('(pointer: fine)').matches) {
+  const canvas = document.createElement('canvas');
+  canvas.id = 'aura-canvas';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d')!;
+
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const puffs: SmokePuff[] = [];
+  let lastX = 0;
+  let lastY = 0;
+  let hasMoved = false;
+
+  window.addEventListener('mousemove', (e) => {
+    if (!hasMoved) {
+      lastX = e.clientX;
+      lastY = e.clientY;
+      hasMoved = true;
+      return;
+    }
+
+    const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+    lastX = e.clientX;
+    lastY = e.clientY;
+
+    // smoke only appears while the cursor is moving
+    if (dist > 1 && puffs.length < 120) {
+      const count = Math.min(2, 1 + Math.floor(dist / 25));
+      for (let i = 0; i < count; i++) {
+        puffs.push({
+          x: e.clientX + (Math.random() - 0.5) * 8,
+          y: e.clientY + (Math.random() - 0.5) * 8,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: -(0.1 + Math.random() * 0.3),
+          life: 0,
+          maxLife: 55 + Math.random() * 35,
+          size: 8 + Math.random() * 6,
+          growth: 1.012 + Math.random() * 0.008,
+          hue: 268 + Math.random() * 14,
+        });
+      }
+    }
+  });
+
+  function animateSmoke() {
+    const night = document.body.classList.contains('night');
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    ctx.globalCompositeOperation = 'source-over';
+
+    for (let i = puffs.length - 1; i >= 0; i--) {
+      const p = puffs[i];
+      p.life++;
+      if (p.life >= p.maxLife) {
+        puffs.splice(i, 1);
+        continue;
+      }
+
+      p.x += p.vx + Math.sin(p.life * 0.07 + p.hue) * 0.2;
+      p.y += p.vy;
+      p.size *= p.growth;
+
+      // fade in quickly, then fade out slowly
+      const fadeIn = Math.min(1, p.life / 8);
+      const fadeOut = 1 - p.life / p.maxLife;
+      const alpha = (night ? 0.16 : 0.14) * fadeIn * fadeOut;
+
+      const lightness = night ? 78 : 66;
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+      g.addColorStop(0, `hsla(${p.hue}, 65%, ${lightness}%, ${alpha})`);
+      g.addColorStop(1, `hsla(${p.hue}, 65%, ${lightness}%, 0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(animateSmoke);
+  }
+  animateSmoke();
+}
 

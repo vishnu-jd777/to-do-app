@@ -343,3 +343,1026 @@ li {
   border-radius: 6px;
   cursor: pointer;
 }
+
+/* ===== STEP 1: HOVER & CLICK ANIMATIONS ===== */
+
+/* smooth transitions for all interactive things */
+#add-task-btn,
+.filter-btns button,
+.edit-btn,
+.delete-btn,
+.delete-modal-actions button,
+.edit-modal-actions button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Add Task button */
+#add-task-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.35);
+  background-color: #4338ca;
+}
+#add-task-btn:active {
+  transform: translateY(0) scale(0.95);
+  box-shadow: none;
+}
+
+/* Filter buttons */
+.filter-btns button:hover:not(.active) {
+  background-color: #e0e7ff;
+  transform: translateY(-2px);
+}
+.filter-btns button:active {
+  transform: scale(0.93);
+}
+
+/* Task row hover */
+.task-item-wrapper {
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+.task-item-wrapper:hover {
+  background-color: #eef2ff;
+  transform: translateX(6px);
+}
+
+/* Edit / Delete icons */
+.edit-btn img,
+.delete-btn img {
+  transition: transform 0.2s ease;
+}
+.edit-btn:hover img {
+  transform: rotate(-15deg) scale(1.25);
+}
+.delete-btn:hover img {
+  transform: rotate(10deg) scale(1.25);
+}
+.edit-btn:active img,
+.delete-btn:active img {
+  transform: scale(0.85);
+}
+
+/* Checkbox */
+.task-item-checkbox {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.task-item-checkbox:hover {
+  transform: scale(1.2);
+}
+.task-item-checkbox:active {
+  transform: scale(0.9);
+}
+
+/* Input focus glow */
+#add-task,
+#priority,
+#dueDate {
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+#add-task:focus,
+#priority:focus,
+#dueDate:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Modal buttons */
+.delete-modal-actions button:hover,
+.edit-modal-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.delete-modal-actions button:active,
+.edit-modal-actions button:active {
+  transform: scale(0.93);
+}
+#delete-confirm:hover {
+  background-color: #dc2626;
+  color: white;
+}
+#edit-save:hover {
+  background-color: #4f46e5;
+  color: white;
+}
+
+/* Respect users who turn off animations */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ===== STEP 2: NIGHT MODE + LIVE AURA ===== */
+
+body.night {
+  background: #0b0b1a;
+  color: #e5e7eb;
+  color-scheme: dark; /* dark date picker & dropdowns */
+}
+
+/* --- floating aura orbs in the background --- */
+body.night::before,
+body.night::after {
+  content: '';
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(70px);
+  z-index: -1;
+  pointer-events: none;
+}
+body.night::before {
+  top: -150px;
+  left: -150px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.55), transparent 70%);
+  animation: orbFloatA 14s ease-in-out infinite;
+}
+body.night::after {
+  bottom: -180px;
+  right: -150px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.45), transparent 70%);
+  animation: orbFloatB 18s ease-in-out infinite;
+}
+
+/* --- twinkling stars --- */
+body.night main::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 90px 120px, #c7d2fe, transparent),
+    radial-gradient(1.5px 1.5px at 160px 60px, #fff, transparent),
+    radial-gradient(1px 1px at 230px 200px, #a5b4fc, transparent),
+    radial-gradient(1.5px 1.5px at 60px 220px, #fff, transparent),
+    radial-gradient(1px 1px at 280px 90px, #fff, transparent);
+  background-size: 340px 300px;
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+/* --- header aura --- */
+body.night header {
+  z-index: 10;
+  background: linear-gradient(120deg, #312e81, #4f46e5, #7c3aed, #312e81);
+  background-size: 300% 300%;
+  animation: headerFlow 8s ease infinite, headerAura 3s ease-in-out infinite;
+}
+body.night .header-title h1 {
+  animation: titleGlow 2.5s ease-in-out infinite;
+}
+body.night .header-logo img {
+  animation: logoFloat 4s ease-in-out infinite,
+    logoAura 3s ease-in-out infinite;
+}
+
+/* --- form --- */
+body.night #add-task,
+body.night #priority,
+body.night #dueDate {
+  background: #14142b;
+  color: #e5e7eb;
+  border-color: #6366f1;
+}
+body.night #add-task::placeholder {
+  color: #7c7fa8;
+}
+body.night #add-task-btn {
+  color: white;
+  animation: btnBreath 2.5s ease-in-out infinite;
+}
+body.night #add-task-btn:hover {
+  animation: none; /* keep the hover glow from step 1 */
+}
+
+/* --- filter tabs --- */
+body.night .filter-tab {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+body.night .filter-btns button:not(.active) {
+  background: transparent;
+  color: #c7d2fe;
+}
+body.night .filter-btns button:hover:not(.active) {
+  background: rgba(99, 102, 241, 0.25);
+}
+body.night .filter-btns button.active {
+  animation: btnBreath 2.5s ease-in-out infinite;
+}
+
+/* --- task list --- */
+body.night .task-list {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+  backdrop-filter: blur(6px);
+}
+body.night .task-list-right select {
+  background: #14142b;
+  color: #e5e7eb;
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+body.night .task-item-wrapper {
+  border-top-color: rgba(99, 102, 241, 0.35);
+}
+body.night .task-item-wrapper:hover {
+  background: rgba(99, 102, 241, 0.12);
+  box-shadow: inset 0 0 25px rgba(129, 140, 248, 0.25);
+}
+body.night .task-item-text.complete {
+  color: #6b7280;
+}
+body.night .task-priority.priority-High {
+  animation: highPulse 1.8s ease-in-out infinite;
+}
+
+/* icons are black SVGs, so flip them for dark mode */
+body.night .task-item-actions-right img,
+body.night .details img {
+  filter: invert(1);
+}
+body.night .edit-btn:hover img {
+  filter: invert(1) drop-shadow(0 0 6px #818cf8);
+}
+body.night .delete-btn:hover img {
+  filter: invert(1) drop-shadow(0 0 6px #f87171);
+}
+
+/* --- modals --- */
+body.night .delete-modal-content,
+body.night .edit-modal-content {
+  background: #14142b;
+  color: #e5e7eb;
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.35);
+}
+body.night .edit-modal-content input,
+body.night .edit-modal-content select {
+  background: #0b0b1a;
+  color: #e5e7eb;
+  border: 1px solid #6366f1;
+  border-radius: 6px;
+}
+body.night .delete-modal-actions button,
+body.night .edit-modal-actions button {
+  background: #26264a;
+  color: #e5e7eb;
+}
+
+/* --- keyframes --- */
+@keyframes orbFloatA {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(140px, 90px) scale(1.2); }
+}
+@keyframes orbFloatB {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-160px, -100px) scale(1.25); }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+@keyframes headerFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes headerAura {
+  0%, 100% { box-shadow: 0 4px 25px rgba(99, 102, 241, 0.4); }
+  50% { box-shadow: 0 6px 45px rgba(168, 85, 247, 0.75); }
+}
+@keyframes titleGlow {
+  0%, 100% { text-shadow: 0 0 6px rgba(255, 255, 255, 0.4); }
+  50% { text-shadow: 0 0 18px rgba(199, 210, 254, 1), 0 0 30px rgba(129, 140, 248, 0.8); }
+}
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes logoAura {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(129, 140, 248, 0.5)); }
+  50% { filter: drop-shadow(0 0 14px rgba(192, 132, 252, 1)); }
+}
+@keyframes btnBreath {
+  0%, 100% { box-shadow: 0 0 6px rgba(99, 102, 241, 0.4); }
+  50% { box-shadow: 0 0 22px rgba(129, 140, 248, 0.9); }
+}
+@keyframes highPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+  50% { box-shadow: 0 0 14px 4px rgba(239, 68, 68, 0.5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.night::before,
+  body.night::after,
+  body.night main::before {
+    animation: none;
+  }
+}
+
+/* ===== STEP 3: ARISE (SHADOW MONARCH) EFFECT ===== */
+
+body.night .task-item-checkbox {
+  accent-color: #7c3aed;
+}
+
+/* row needs to be a positioning parent for the smoke */
+li.arise {
+  position: relative;
+}
+
+/* aura burst on the row */
+.arise .task-item-wrapper {
+  animation: ariseRow 1.5s ease-out;
+}
+
+/* checkbox pop */
+.arise .task-item-checkbox {
+  animation: ariseCheck 0.8s ease-out;
+}
+
+/* title glow */
+.arise .task-item-text.complete {
+  animation: ariseText 1.5s ease-out;
+}
+
+/* shadow smoke rising */
+.arise::before,
+.arise::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 55%;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(124, 58, 237, 0.85),
+    rgba(30, 10, 60, 0.55) 45%,
+    transparent 72%
+  );
+  filter: blur(14px);
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+}
+.arise::before {
+  left: 0;
+  animation: smokeRise 1.5s ease-out;
+}
+.arise::after {
+  right: 0;
+  animation: smokeRise 1.5s ease-out 0.2s;
+}
+
+/* full-screen ARISE banner */
+.arise-banner {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: radial-gradient(circle at center, rgba(76, 29, 149, 0.55), rgba(5, 5, 20, 0.1) 65%);
+  animation: bannerFade 1.7s ease-out forwards;
+}
+.arise-sub {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  letter-spacing: 0.25em;
+  color: #7dd3fc;
+  padding: 6px 18px;
+  border: 1px solid #38bdf8;
+  background: rgba(5, 10, 30, 0.75);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.6);
+  text-shadow: 0 0 8px #38bdf8;
+  animation: subIn 1.7s ease-out forwards;
+}
+.arise-main {
+  font-size: clamp(48px, 12vw, 110px);
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  padding-left: 0.25em;
+  color: #ddd6fe;
+  text-shadow: 0 0 20px #8b5cf6, 0 0 45px #6d28d9, 0 0 80px #38bdf8;
+  animation: ariseMain 1.7s ease-out forwards;
+}
+
+/* keyframes */
+@keyframes ariseRow {
+  0% {
+    box-shadow: inset 0 0 0 rgba(124, 58, 237, 0);
+    background-color: transparent;
+  }
+  20% {
+    box-shadow: inset 0 0 60px rgba(124, 58, 237, 0.9),
+      0 0 35px rgba(56, 189, 248, 0.6);
+    background-color: rgba(76, 29, 149, 0.45);
+  }
+  100% {
+    box-shadow: inset 0 0 0 rgba(124, 58, 237, 0),
+      0 0 0 rgba(56, 189, 248, 0);
+    background-color: transparent;
+  }
+}
+@keyframes ariseCheck {
+  0% { transform: scale(1); filter: drop-shadow(0 0 0 #a78bfa); }
+  30% {
+    transform: scale(1.8) rotate(12deg);
+    filter: drop-shadow(0 0 10px #a78bfa) drop-shadow(0 0 20px #38bdf8);
+  }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+}
+@keyframes ariseText {
+  0% { text-shadow: 0 0 0 transparent; }
+  30% { text-shadow: 0 0 14px #a78bfa, 0 0 28px #7c3aed; }
+  100% { text-shadow: 0 0 0 transparent; }
+}
+@keyframes smokeRise {
+  0% { opacity: 0; transform: translateY(20px) scale(0.6); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-70px) scale(1.5); }
+}
+@keyframes bannerFade {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes subIn {
+  0% { opacity: 0; transform: translateY(12px); }
+  30%, 100% { opacity: 1; transform: none; }
+}
+@keyframes ariseMain {
+  0% { opacity: 0; transform: scale(1.8); filter: blur(14px); letter-spacing: 0.6em; }
+  25% { opacity: 1; transform: scale(1); filter: blur(0); letter-spacing: 0.25em; }
+  75% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0; transform: translateY(-25px) scale(1.15); filter: blur(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arise::before,
+  .arise::after {
+    animation: none;
+  }
+}
+
+
+/* ===== STEP 4: DAY / NIGHT TOGGLE ===== */
+
+body {
+  transition: background-color 0.6s ease, color 0.6s ease;
+}
+
+#theme-toggle {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  font-size: 22px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+}
+#theme-toggle:hover {
+  transform: scale(1.12) rotate(15deg);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.6);
+  animation: none;
+}
+#theme-toggle:active {
+  transform: scale(0.88);
+}
+body.night #theme-toggle {
+  animation: btnBreath 2.5s ease-in-out infinite;
+}
+
+/* sun & moon swap */
+.theme-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s ease, opacity 0.4s ease;
+}
+.theme-icon.sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+.theme-icon.moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+body.night .theme-icon.sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+}
+body.night .theme-icon.moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+
+/* ===== STEP 4.5: LIGHT MODE LIVE ANIMATIONS ===== */
+
+body:not(.night) {
+  background-color: #f5f7ff;
+}
+
+/* --- drifting pastel aura orbs --- */
+body:not(.night)::before,
+body:not(.night)::after {
+  content: '';
+  position: fixed;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  filter: blur(70px);
+  z-index: -1;
+  pointer-events: none;
+}
+body:not(.night)::before {
+  top: -140px;
+  left: -140px;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.4), transparent 70%);
+  animation: orbFloatA 14s ease-in-out infinite;
+}
+body:not(.night)::after {
+  bottom: -170px;
+  right: -140px;
+  background: radial-gradient(circle, rgba(244, 114, 182, 0.3), transparent 70%);
+  animation: orbFloatB 18s ease-in-out infinite;
+}
+
+/* --- pulsing sun glow (top right) --- */
+body:not(.night) main::before {
+  content: '';
+  position: fixed;
+  top: -130px;
+  right: -130px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(253, 224, 71, 0.55), transparent 70%);
+  filter: blur(40px);
+  z-index: -1;
+  pointer-events: none;
+  animation: sunGlow 6s ease-in-out infinite;
+}
+
+/* --- floating particles rising up --- */
+body:not(.night) main::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(3px 3px at 40px 60px, rgba(99, 102, 241, 0.35), transparent),
+    radial-gradient(2px 2px at 150px 170px, rgba(56, 189, 248, 0.45), transparent),
+    radial-gradient(3px 3px at 240px 90px, rgba(244, 114, 182, 0.35), transparent),
+    radial-gradient(2px 2px at 90px 250px, rgba(99, 102, 241, 0.3), transparent),
+    radial-gradient(3px 3px at 280px 230px, rgba(253, 186, 116, 0.5), transparent);
+  background-size: 320px 320px;
+  animation: particlesRise 25s linear infinite;
+}
+
+/* --- header --- */
+body:not(.night) header {
+  z-index: 10;
+  background: linear-gradient(120deg, #4f46e5, #6366f1, #8b5cf6, #38bdf8, #4f46e5);
+  background-size: 300% 300%;
+  animation: headerFlow 9s ease infinite, headerAura 3s ease-in-out infinite;
+}
+body:not(.night) .header-title h1 {
+  animation: titleGlow 2.5s ease-in-out infinite;
+}
+body:not(.night) .header-logo img {
+  animation: logoFloat 4s ease-in-out infinite,
+    logoAura 3s ease-in-out infinite;
+}
+
+/* --- Add Task button: shine sweep + glow --- */
+body:not(.night) #add-task-btn {
+  color: white;
+  background-image: linear-gradient(
+    110deg,
+    #4f46e5 35%,
+    #818cf8 50%,
+    #4f46e5 65%
+  );
+  background-size: 250% 100%;
+  animation: btnShine 3s linear infinite, btnBreath 2.5s ease-in-out infinite;
+}
+body:not(.night) #add-task-btn:hover {
+  animation: none;
+}
+
+/* --- active filter + toggle glow --- */
+body:not(.night) .filter-btns button.active {
+  animation: btnBreath 2.5s ease-in-out infinite;
+}
+body:not(.night) #theme-toggle {
+  animation: sunPulse 3s ease-in-out infinite;
+}
+body:not(.night) #theme-toggle:hover {
+  animation: none;
+}
+
+/* --- task list --- */
+body:not(.night) .task-list {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(6px);
+  animation: listBreath 4s ease-in-out infinite;
+}
+body:not(.night) .task-item-wrapper:hover {
+  box-shadow: inset 0 0 25px rgba(129, 140, 248, 0.22);
+}
+body:not(.night) .task-priority.priority-High {
+  animation: highPulse 1.8s ease-in-out infinite;
+}
+
+/* --- keyframes (light only) --- */
+@keyframes sunGlow {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.25); opacity: 1; }
+}
+@keyframes particlesRise {
+  from { background-position: 0 0; }
+  to { background-position: 0 -320px; }
+}
+@keyframes btnShine {
+  from { background-position: 150% 0; }
+  to { background-position: -100% 0; }
+}
+@keyframes listBreath {
+  0%, 100% { box-shadow: 0 0 12px rgba(99, 102, 241, 0.15); }
+  50% { box-shadow: 0 0 30px rgba(99, 102, 241, 0.35); }
+}
+@keyframes sunPulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(253, 224, 71, 0.4); }
+  50% { box-shadow: 0 0 22px rgba(253, 224, 71, 0.95); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:not(.night)::before,
+  body:not(.night)::after,
+  body:not(.night) main::before,
+  body:not(.night) main::after {
+    animation: none;
+  }
+}
+
+/* ===== STEP 5: SHADOW MONARCH AURA ===== */
+
+#aura-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #aura-canvas {
+    display: none;
+  }
+}
+
+/* ===== STEP 6: TASK ENTER + SHADOW DISSOLVE ===== */
+
+/* new task slides in */
+li.task-enter {
+  animation: taskEnter 0.6s ease-out;
+}
+li.task-enter .task-item-wrapper {
+  animation: newTaskGlow 1.3s ease-out;
+}
+
+@keyframes taskEnter {
+  0% { opacity: 0; transform: translateX(-50px) scale(0.96); filter: blur(6px); }
+  60% { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes newTaskGlow {
+  0% { box-shadow: inset 0 0 0 rgba(124, 58, 237, 0); }
+  25% {
+    box-shadow: inset 0 0 45px rgba(124, 58, 237, 0.55),
+      0 0 22px rgba(129, 140, 248, 0.5);
+  }
+  100% { box-shadow: inset 0 0 0 rgba(124, 58, 237, 0); }
+}
+
+/* deleted task dissolves into shadow */
+li.task-dissolve {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+  animation: shadowDissolve 0.7s ease-in forwards;
+}
+li.task-dissolve::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 80px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(124, 58, 237, 0.75),
+    rgba(30, 10, 60, 0.4) 50%,
+    transparent 75%
+  );
+  filter: blur(12px);
+  opacity: 0;
+  animation: smokeRise 0.7s ease-out;
+}
+
+@keyframes shadowDissolve {
+  0% {
+    opacity: 1;
+    max-height: 200px;
+    filter: none;
+    transform: none;
+  }
+  35% {
+    opacity: 1;
+    max-height: 200px;
+    filter: brightness(0.55) drop-shadow(0 0 10px rgba(124, 58, 237, 0.9));
+  }
+  60% {
+    max-height: 200px;
+  }
+  100% {
+    opacity: 0;
+    max-height: 0;
+    filter: blur(10px) brightness(0.35);
+    transform: translateY(-25px) scale(0.96);
+  }
+}
+
+/* modals pop in (bonus) */
+.delete-modal,
+.edit-modal {
+  animation: modalFade 0.25s ease-out;
+}
+.delete-modal-content,
+.edit-modal-content {
+  animation: modalPop 0.35s cubic-bezier(0.2, 1.2, 0.4, 1);
+}
+@keyframes modalFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.8) translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ===== STEP 7: RESPONSIVE / MOBILE ===== */
+
+/* ---------- Tablet & below (≤ 768px) ---------- */
+@media (max-width: 768px) {
+  header {
+    padding: 8px 14px;
+    column-gap: 12px;
+  }
+  .header-logo {
+    width: 80px;
+    height: 45px;
+  }
+  .header-title h1 {
+    font-size: 24px;
+  }
+  .header-title p {
+    font-size: 14px;
+  }
+
+  .form {
+    padding: 16px 14px;
+  }
+
+  /* form: input on top row, priority + date side by side, button full width */
+  #task-form {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  #add-task,
+  #priority,
+  #dueDate,
+  #add-task-btn {
+    height: 50px;
+    font-size: 16px;
+    min-width: 0;
+  }
+  #add-task {
+    flex: 1 1 100%;
+  }
+  #priority,
+  #dueDate {
+    flex: 1 1 calc(50% - 6px);
+  }
+  #add-task-btn {
+    flex: 1 1 100%;
+  }
+
+  .filter-tab {
+    margin: 0 14px;
+    padding: 14px;
+  }
+  .task-list {
+    margin: 10px 14px;
+  }
+}
+
+/* ---------- Phones (≤ 480px) ---------- */
+@media (max-width: 480px) {
+  /* header: keep one logo, smaller title */
+  header {
+    padding: 8px 12px;
+    column-gap: 10px;
+  }
+  .header-content .header-logo {
+    display: none;
+  }
+  .header-logo {
+    width: 56px;
+    height: 40px;
+  }
+  .header-title h1 {
+    font-size: 19px;
+    letter-spacing: 0.5px;
+  }
+  .header-title p {
+    font-size: 12px;
+  }
+  #theme-toggle {
+    width: 40px;
+    height: 40px;
+    font-size: 19px;
+  }
+
+  .form {
+    padding: 14px 12px;
+  }
+
+  /* form: everything stacked */
+  #priority,
+  #dueDate {
+    flex: 1 1 100%;
+  }
+
+  .filter-tab {
+    margin: 0 12px;
+    padding: 10px;
+    border-radius: 14px;
+  }
+  .filter-btns {
+    width: 100%;
+    gap: 8px;
+  }
+  .filter-btns button {
+    flex: 1;
+    padding: 8px 6px;
+    font-size: 14px;
+    height: 42px;
+  }
+
+  .task-list {
+    margin: 10px 12px;
+    padding: 12px 0;
+  }
+
+  /* count + sort stack vertically */
+  .task-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 14px;
+  }
+  .task-list-left,
+  .task-list-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+  .task-list-right {
+    width: 100%;
+  }
+  .task-list-right select {
+    flex: 1;
+    font-size: 15px;
+    padding: 8px;
+  }
+
+  /* task rows */
+  .task-item-wrapper {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+  .task-item-info-left {
+    flex: 1;
+    min-width: 0;
+    gap: 12px;
+  }
+  .task-item-text-left-wrapper {
+    min-width: 0;
+    gap: 8px;
+  }
+  .task-item-text {
+    font-size: 17px;
+    overflow-wrap: anywhere;
+  }
+  .task-item-checkbox {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .details {
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    font-size: 14px;
+  }
+  .task-priority {
+    font-size: 14px;
+  }
+
+  /* bigger tap targets for edit / delete */
+  .task-item-actions-right {
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .edit-btn,
+  .delete-btn {
+    padding: 10px;
+  }
+  .task-item-actions-right img {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* modals */
+  .delete-modal-content,
+  .edit-modal-content {
+    width: 90vw;
+    max-width: 350px;
+    padding: 20px;
+  }
+  .edit-modal-content input,
+  .edit-modal-content select {
+    font-size: 16px; /* stops iOS zoom on focus */
+    padding: 10px;
+  }
+  .delete-modal-actions button,
+  .edit-modal-actions button {
+    padding: 10px 18px;
+    font-size: 15px;
+  }
+
+  /* ARISE banner */
+  .arise-sub {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    padding: 5px 12px;
+  }
+  .arise-main {
+    letter-spacing: 0.15em;
+  }
+}
+
+/* ---------- Very small phones (≤ 360px) ---------- */
+@media (max-width: 360px) {
+  .header-title h1 {
+    font-size: 17px;
+  }
+  .header-logo {
+    width: 46px;
+  }
+  .task-item-text {
+    font-size: 16px;
+  }
+}
+
+/* ---------- Touch screens: no "stuck" hover movement ---------- */
+@media (hover: none) {
+  .task-item-wrapper:hover,
+  #add-task-btn:hover,
+  .filter-btns button:hover:not(.active),
+  .task-item-checkbox:hover,
+  #theme-toggle:hover {
+    transform: none;
+  }
+}
